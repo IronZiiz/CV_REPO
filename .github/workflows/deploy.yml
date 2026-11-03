@@ -17,12 +17,17 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The app lives in site/; the repo root holds the context-engineering docs.
+    defaults:
+      run:
+        working-directory: site
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: site/package-lock.json
       - run: npm ci
       - run: npm run lint
       - name: Build
@@ -38,9 +43,10 @@ jobs:
             export SITE_URL="https://$OWNER.github.io/$REPO/"
           fi
           npm run build
+      # Not a `run` step, so it does not inherit the working-directory above.
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site/dist
 
   deploy:
     needs: build
