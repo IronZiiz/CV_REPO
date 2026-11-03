@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "title": "Thiago Zilli, Físico | Portfólio",
+    "description": "Portfólio de Thiago Zilli, físico e cientista de dados, com projetos em analytics comercial, visão computacional e neurociência computacional."
+  },
+  "a11y": {
+    "skipToContent": "Pular para o conteúdo"
+  },
+  "header": {
+    "switchLanguage": "Mudar o idioma para inglês",
+    "downloadCv": "Baixar CV",
+    "downloadCvLabel": "Baixar CV (arquivo PDF)",
+    "darkMode": "Ativar o modo escuro",
+    "lightMode": "Ativar o modo claro"
+  },
+  "hero": {
+    "name": "Thiago Zilli,",
+    "role": "Físico",
+    "portraitAlt": "Retrato de Thiago Zilli"
+  },
+  "nav": {
+    "label": "Alternar entre Sobre e Projetos",
+    "about": "Sobre",
+    "projects": "Projetos"
+  },
+  "about": {
+    "whoAmI": {
+      "title": "Quem sou eu?",
+      "paragraphs": [
+        "**Cientista de Dados com experiência profissional de dois anos** em commercial analytics (análise de dados comerciais), análise de dados e CRM na indústria RCM Cabos Elétricos. **Bacharel em Física pela Universidade Federal do Paraná (UFPR)**, com período de **pesquisa internacional em neurociência computacional** na University of Lethbridge (Canadá).",
+        "Minha trajetória acadêmica foi direcionada à tecnologia: conduzi, em colaboração com a Farmacologia, um projeto de **fine-tuning (ajuste fino) de modelos de segmentação de imagem** para neurônios do gânglio trigêmeo, aplicando visão computacional e processamento de imagem para extrair propriedades morfométricas (área, diâmetro, entre outras). O objetivo foi criar uma ferramenta de pesquisa automatizada, com erro quantificável, que **transformasse horas de trabalho manual em segundos**, possibilitando mais estudos sobre o mecanismo da dor de cabeça crônica. Os primeiros resultados foram apresentados no congresso internacional **International Headache Congress (IHC) 2025**, em São Paulo, e o artigo está em processo de publicação, **em revisão por pares na revista Neuroinformatics**.",
+        "Ainda na graduação, fui aluno especial na pós-graduação em **Deep Learning (aprendizado profundo)**, realizei disciplinas como **Algoritmos e Estrutura de Dados I** e **Estatística**, e fui gerente de projetos na empresa júnior [Mathmorphosis](https://www.instagram.com/mathmorphosis/), onde **liderei a equipe no [I Hackathon de Dados da UFPR](https://ufpr.br/eventos/hackathon-ia/)**, onde conquistamos o **Top 3**."
+      ]
+    },
+    "stack": {
+      "title": "Stack principal",
+      "groups": [
+        {
+          "title": "Linguagens & Análise de Dados",
+          "items": [
+            "Python",
+            "SQL",
+            "Pandas",
+            "NumPy",
+            "Matplotlib",
+            "SciPy",
+            "Plotly",
+            "Streamlit",
+            "Segmentação de clientes",
+            "Redução de Churn"
+          ]
+        },
+        {
+          "title": "Machine Learning, NLP & LLMs",
+          "items": [
+            "PyTorch",
+            "Sklearn",
+            "Fine-tuning de modelos de fundação",
+            "Prophet (previsão de séries temporais)",
+            "scikit-image",
+            "API OpenAI",
+            "Region props",
+            "Análise de sentimento"
+          ]
+        },
+        {
+          "title": "Engenharia & Infraestrutura",
+          "items": [
+            "FastAPI",
+            "Pydantic v2",
+            "SQLAlchemy",
+            "Docker / Docker Compose",
+            "Bancos relacionais PostgreSQL"
+          ]
+        },
+        {
+          "title": "Metodologia & Boas Práticas",
+          "items": [
+            "CRISP-DM",
+            "MVC",
+            "Clean Code / SOLID",
+            "Validação estatística (cross-validation)",
+            "Testes automatizados",
+            "Storytelling"
+          ]
+        }
+      ]
+    },
+    "education": {
+      "title": "Formação",
+      "items": [
+        {
+          "id": "ufpr",
+          "title": "Bacharelado em Física",
+          "institution": "Universidade Federal do Paraná",
+          "location": "Curitiba, PR, Brasil",
+          "period": "2022–2026",
+          "logoAlt": "Logo da Universidade Federal do Paraná (UFPR)"
+        },
+        {
+          "id": "lethbridge",
+          "title": "Estágio Internacional",
+          "institution": "Universidade de Lethbridge",
+          "location": "Lethbridge, AB, Canadá",
+          "period": "2026",
+          "logoAlt": "Logo da University of Lethbridge"
+        },
+        {
+          "id": "alura",
+          "title": "Cursos complementares",
+          "institution": "Alura — escola online de tecnologia",
+          "location": "",
+          "period": "2024–Aprendizado contínuo",
+          "logoAlt": "Logo da Alura"
+        }
+      ]
+    },
+    "contact": {
+      "title": "Contato",
+      "text": "Tenho interesse particular em **problemas interdisciplinares**, sejam entre setores de uma empresa, ou entre farmacologia, neurociência e física. :)"
+    }
+  },
+  "projects": {
+    "title": "Projetos",
+    "demo": "Ver projeto",
+    "code": "Ver código",
+    "newTab": "(abre em nova aba)",
+    "items": [
+      {
+        "id": "dashboard",
+        "title": "Plataforma de Analytics Comercial — Indústria RCM Cabos Elétricos",
+        "institution": "",
+        "period": "mai/2026 – jul/2026",
+        "chips": [
+          "Python",
+          "SQL",
+          "SQLAlchemy",
+          "PostgreSQL",
+          "Pandas",
+          "Streamlit",
+          "Plotly",
+          "Prophet",
+          "NLP",
+          "API OpenAI",
+          "Docker"
+        ],
+        "highlights": [],
+        "description": "**Projetei e construí, do zero**, uma plataforma de analytics (análise de dados) para uma indústria com baixa maturidade em análise de dados: pipeline (fluxo automatizado de dados) **diário e auditável sobre milhões de registros** e anos de histórico, modelo de risco de clientes combinando regras de negócio com LRFM e sentimento via NLP (processamento de linguagem natural) e LLM (grandes modelos de linguagem), e **previsão de receita com Prophet**. **Adotada pela Diretoria e pelo time Comercial**."
+      },
+      {
+        "id": "api",
+        "title": "API REST de Analytics — Indústria RCM Cabos Elétricos",
+        "institution": "",
+        "period": "mar/2026 (2 semanas)",
+        "chips": [
+          "Python",
+          "FastAPI",
+          "Pydantic v2",
+          "SQLAlchemy",
+          "MVC",
+          "Swagger",
+          "Testes automatizados"
+        ],
+        "highlights": [],
+        "description": "Projetei e desenvolvi uma API REST em uma arquitetura modular por domínio (MVC), expondo **203 endpoints (pontos de acesso da API) analíticos** consumidos por sistemas internos da empresa (CRM), **sem alterar a lógica de negócio**. Padronizei o contrato de resposta, automatizei testes de acoplamento e documentei tudo com Swagger."
+      },
+      {
+        "id": "hackathon",
+        "title": "Plataforma de Avaliação Institucional — I Hackathon de Dados UFPR",
+        "institution": "",
+        "period": "dez/2025 (5 dias)",
+        "chips": [
+          "Python",
+          "Streamlit",
+          "Plotly",
+          "Pandas",
+          "NLP",
+          "Storytelling"
+        ],
+        "highlights": [
+          "Top 3"
+        ],
+        "description": "**Liderei uma equipe de 3 pessoas** e, **em 5 dias**, construímos uma plataforma de visualização para dados reais utilizando pesquisas de avaliação institucional da UFPR, com índice de sentimento e gráficos de saldo de opinião. Ficamos entre as 5 equipes finalistas, de mais de 10 participantes, e **conquistamos o Top 3**; a solução foi **considerada para futuro uso nas plataformas da universidade**."
+      },
+      {
+        "id": "finetuning",
+        "title": "Fine-tuning de Cellpose-SAM para Segmentação de Neurônios",
+        "institution": "",
+        "period": "jun/2025 – dez/2026",
+        "chips": [
+          "Python",
+          "PyTorch",
+          "Cellpose-SAM",
+          "scikit-image",
+          "NumPy",
+          "Fine-tuning"
+        ],
+        "highlights": [
+          "Artigo submetido"
+        ],
+        "description": "**Primeiro autor de artigo em revisão por pares na Neuroinformatics**. Adaptei um modelo de fundação de segmentação celular (Cellpose-SAM) para detectar e medir neurônios em histologia, elevando o AP@50 (Average Precision, precisão média) **de 0,129 para 0,747 (quase 6×)** e atingindo **F1 de 0,849** e Recall (revocação) de 0,881, com **apenas 31 imagens** e 1.801 objetos anotados, proporcionando uma ferramenta automática com erro quantificável para realizar estudos morfológicos e contribuir para a pesquisa na identificação de mecanismos de dores de cabeça crônica."
+      },
+      {
+        "id": "cvnn",
+        "title": "Pesquisa em extensão teórica para regimes estocásticos em Redes Neurais de valores complexos (CVNNs)",
+        "institution": "— University of Lethbridge, Canadá",
+        "period": "ago/2026 – nov/2026",
+        "chips": [
+          "Python",
+          "NumPy",
+          "SciPy",
+          "Matplotlib",
+          "Redes neurais de valores complexos",
+          "Mitacs Globalink Research Award"
+        ],
+        "highlights": [],
+        "description": "Pesquisa em andamento sob orientação do **Prof. Roberto Budzinski** no departamento de neurociência da Universidade de Lethbridge."
+      },
+      {
+        "id": "portfolio",
+        "title": "Este portfólio — context engineering aplicado a um site",
+        "institution": "",
+        "period": "nov/2026",
+        "chips": [
+          "Context engineering",
+          "Especificação de agentes",
+          "Figma",
+          "Claude Code",
+          "React 19",
+          "TypeScript"
+        ],
+        "highlights": [],
+        "description": "Construí **este site dirigindo um agente de código por especificação**, não por prompts soltos. Escrevi **9 documentos de contexto** (~1.000 linhas) que definem layout, paleta, botões, background e tradução, com uma regra clara de quem manda quando duas especificações se contradizem. O agente só executava depois de ler o contexto e apresentar um plano. Cada vez que ele precisou **fugir de uma especificação, o motivo ficou registrado** no `DECISIONS.md`."
+      }
+    ],
+    "copyright": "Código original sob direitos autorais",
+    "demoFictitious": "Ver demo (dados fictícios)",
+    "gallery": "Ver imagens ilustrativas",
+    "galleryClose": "Fechar",
+    "galleryPrev": "Imagem anterior",
+    "galleryNext": "Próxima imagem",
+    "galleryCount": "Imagem {current} de {total}",
+    "galleryNote": "Ambiente de demonstração com dados fictícios.",
+    "galleries": {
+      "dashboard": [
+        {
+          "src": "geral-rentabilidade",
+          "caption": "Panorama Geral · Rentabilidade — KPIs de receita, lucro, margem e ticket médio com comparação entre períodos."
+        },
+        {
+          "src": "geral-performance",
+          "caption": "Panorama Geral · Performance — conversão, pedidos, orçamentos e novos clientes."
+        },
+        {
+          "src": "geral-riscos",
+          "caption": "Panorama Geral · Riscos/Oportunidades — concentração da perda de receita e de pedidos."
+        },
+        {
+          "src": "vendedores-rentabilidade",
+          "caption": "Vendedores · Rentabilidade — os mesmos indicadores por representante."
+        },
+        {
+          "src": "vendedores-performance",
+          "caption": "Vendedores · Performance — meta batida por mês e média dos representantes."
+        },
+        {
+          "src": "vendedores-riscos",
+          "caption": "Vendedores · Riscos/Oportunidades — concentração da perda por representante."
+        },
+        {
+          "src": "clientes-resumo",
+          "caption": "Clientes · Resumo — termômetros de saúde, rentabilidade e oportunidades do cliente."
+        },
+        {
+          "src": "clientes-saude",
+          "caption": "Clientes · Saúde e Satisfação — evolução do sentimento e segmentação LRFM contra a mediana do setor."
+        },
+        {
+          "src": "clientes-rentabilidade",
+          "caption": "Clientes · Rentabilidade — LVT, lucro e margem do cliente comparados ao setor."
+        },
+        {
+          "src": "clientes-oportunidades",
+          "caption": "Clientes · Oportunidades — cross-selling, grupos não consumidos e crédito disponível."
+        }
+      ],
+      "api": [
+        {
+          "src": "api-geral",
+          "caption": "Documentação Swagger — contrato único de resposta e os endpoints do Panorama Geral."
+        },
+        {
+          "src": "api-vendedores",
+          "caption": "Endpoints de Vendedores, organizados por domínio (filtros, rentabilidade, performance, riscos)."
+        },
+        {
+          "src": "api-clientes",
+          "caption": "Endpoints de Clientes — resumo, saúde e satisfação, rentabilidade e oportunidades."
+        },
+        {
+          "src": "api-endpoint",
+          "caption": "Um endpoint aberto: parâmetros, respostas e exemplos documentados."
+        }
+      ]
+    }
+  },
+  "social": {
+    "label": "Redes e contato",
+    "email": "thiagozilli10@gmail.com",
+    "instagram": "Instagram de Thiago Zilli (abre em nova aba)",
+    "linkedin": "LinkedIn de Thiago Zilli (abre em nova aba)",
+    "orcid": "ORCID de Thiago Zilli (abre em nova aba)",
+    "github": "GitHub de Thiago Zilli (abre em nova aba)"
+  }
+}

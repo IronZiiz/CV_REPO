@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# local env files
+.env
+.env.*
+!.env.example
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# the CV is a personal document: keep it out of the repo
+site/public/THIAGO_ZILLI_CV.pdf
