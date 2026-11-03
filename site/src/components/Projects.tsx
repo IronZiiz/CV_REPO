@@ -57,8 +57,8 @@ const LINKS: Record<string, { demo?: string; code?: string }> = {
   },
   finetuning: { code: 'https://github.com/IronZiiz/Domain-specific_finetunning' },
   cvnn: { code: 'https://github.com/budzinskilab' },
-  // This site: the repository link is pending (DECISIONS.md).
-  portfolio: {},
+  // This site: the repository holds both the app and the context-engineering docs.
+  portfolio: { demo: 'https://github.com/IronZiiz/CV_REPO' },
 }
 
 // SITE_LAYOUT (Projetos): left column, then a right column that starts lower.
@@ -125,7 +125,20 @@ function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean })
         className="min-h-[clamp(9rem,12vw,13rem)] [&_.glass-noise]:opacity-[0.06]"
         contentClassName="h-full"
       >
-        {primary ? (
+        {/*
+         * A closed-source project has nowhere to link to, so its card opens the
+         * gallery — the same action as its "ver imagens ilustrativas" button.
+         */}
+        {closedSource && gallery.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => setGalleryOpen(true)}
+            className="block h-full w-full cursor-pointer p-4 text-left sm:p-5"
+            aria-label={`${project.title} — ${t('projects.gallery')}`}
+          >
+            {heading}
+          </button>
+        ) : primary ? (
           <a
             href={primary}
             target="_blank"
