@@ -27,8 +27,8 @@
     "whoAmI": {
       "title": "Who am I?",
       "paragraphs": [
-        "**Data scientist with two years of professional experience** in commercial analytics, data analysis and CRM at RCM Electrical Cables. I hold a **bachelor's degree in Physics from the Federal University of Paraná (UFPR)** and spent an **international research period in computational neuroscience** at the University of Lethbridge (Canada).",
-        "My academic path has been geared toward technology: in collaboration with the Pharmacology department, I carried out a **fine-tuning project for image segmentation models** of trigeminal ganglion neurons, applying computer vision and image processing to extract morphometric properties such as area and diameter. The goal was to build an automated research tool with quantifiable error that **turns hours of manual work into seconds**, enabling further studies on the mechanisms of chronic headache. The first results were presented at the **International Headache Congress (IHC) 2025** in São Paulo, and the paper is currently **under peer review at the journal Neuroinformatics**.",
+        "**Data scientist with 2 years of experience** in commercial analytics and CRM at **RCM Electrical Cables**. I replaced scattered Excel spreadsheets with a **single source of data**, built on a **daily, auditable pipeline** that feeds **3 dashboards** for the executive team: a company-wide overview, sales rep performance and a customer view. I also developed a **monthly revenue forecast with Prophet** (MAPE of **~9%**, up to three months ahead) and a **FastAPI service** that integrates this data into the systems used by the commercial and finance teams. I hold a **bachelor's degree in Physics from UFPR**, with **[international research in computational neuroscience](https://www.budzinskilab.ca)** at the University of Lethbridge (Canada).",
+        "In research, I took part in a project **fine-tuning Cellpose-SAM** to identify and measure neurons in histology, in collaboration with the Pharmacology department, and I am **first author of the resulting paper**. With just **31 annotated images**, AP@50 (average precision at a minimum 50% overlap), the main segmentation metric, rose **from 0.129 to 0.747**. For neuron counting, the F1-score reached **0.85**. Analysis went from **~15 minutes to under 10 seconds per image**, with quantified error on the morphometric measurements. The work was presented at the **International Headache Congress (IHC) 2025** and is **under review at Neuroinformatics**.",
         "While still an undergraduate, I was a special student in the graduate course on **Deep Learning**, took subjects such as **Algorithms and Data Structures I** and **Statistics**, and served as project manager at the junior enterprise [Mathmorphosis](https://www.instagram.com/mathmorphosis/), where I **led the team at [UFPR's 1st Data Hackathon](https://ufpr.br/eventos/hackathon-ia/)**, where we took **Top 3**."
       ]
     },
@@ -115,6 +115,21 @@
         }
       ]
     },
+    "languages": {
+      "title": "Languages",
+      "items": [
+        {
+          "id": "pt",
+          "name": "Portuguese",
+          "level": "Fluent (native)"
+        },
+        {
+          "id": "en",
+          "name": "English",
+          "level": "Advanced professional"
+        }
+      ]
+    },
     "contact": {
       "title": "Contact",
       "text": "I'm especially interested in **interdisciplinary problems**, whether they span different departments of a company or pharmacology, neuroscience and physics. :)"
@@ -145,7 +160,7 @@
           "Docker"
         ],
         "highlights": [],
-        "description": "**I designed and built, from scratch**, an analytics platform for a manufacturer with low data maturity: an **auditable daily pipeline over millions of records** and years of history, a customer-risk model combining business rules with LRFM and sentiment analysis (NLP/LLM), and **revenue forecasting with Prophet**. **It was adopted by the executive board and the sales team**."
+        "description": "**Replaced scattered spreadsheets** whose indicators disagreed across reports and **made it possible to adopt a source of truth and reference** for the executive board and the commercial teams. I interviewed two departments to turn the business pain into **9 objectives**, and **scoped out 3 unfeasible ones with documented justification before the first line of code**. I built it end to end, on my own: a **daily, auditable pipeline** over two PostgreSQL databases, **LRFM** segmentation, cross-selling, **revenue forecasting with Prophet** and LLM-based sentiment classification. A **statistical detector for out-of-policy discounts** **turned an executive hunch into quantified, auditable evidence**. I cut the pipeline's memory use by **80%**, eliminating failures on 8 GB machines."
       },
       {
         "id": "api",
@@ -162,7 +177,7 @@
           "Automated tests"
         ],
         "highlights": [],
-        "description": "I designed and developed a REST API with a modular, domain-based architecture (MVC), exposing **203 analytics endpoints** consumed by the company's internal systems (CRM) **without changing the business logic**. I standardized the response contract, automated coupling tests and documented everything with Swagger."
+        "description": "**Unlocked the analytics layer**: the analyses were trapped inside Streamlit and no other company system could consume them. In **2 weeks** I built an API in a modular architecture organised by business domain, with **203 endpoints**, a single response contract, Pydantic v2 validation and centralised error handling. I wrote a **coupling smoke test covering 704 calls in ~55s**, which **found 2 real bugs** in the analytics layer, both fixed. **The business logic was left untouched**, and everything was documented with Swagger."
       },
       {
         "id": "hackathon",
@@ -180,7 +195,7 @@
         "highlights": [
           "Top 3"
         ],
-        "description": "**I led a 3-person team** that built, **in 5 days**, a visualization platform for real data from UFPR's institutional evaluation surveys, featuring a sentiment index and opinion-balance charts. We were one of 5 finalist teams out of more than 10 entrants and **placed in the Top 3**; **the university considered the solution for future use** on its platforms."
+        "description": "**Top 3 among more than 10 teams**, and the solution was **considered for future use on the university's platforms**. I **led a team of 3** and, **in 5 days**, we built a visualisation platform over real UFPR institutional evaluation data, with a sentiment index and opinion-balance charts that made legible responses that used to sit in Excel spreadsheets hidden on the university's websites."
       },
       {
         "id": "finetuning",
@@ -198,7 +213,7 @@
         "highlights": [
           "Paper submitted"
         ],
-        "description": "**First author of a paper under peer review at Neuroinformatics**. I adapted a cell-segmentation foundation model (Cellpose-SAM) to detect and measure neurons in histology images, raising AP@50 (Average Precision) **from 0.129 to 0.747 (almost 6×)** and reaching **an F1 of 0.849** and a recall of 0.881 with **only 31 images** and 1,801 annotated objects. The result is an automated tool with quantifiable error for morphological studies, supporting research into the mechanisms of chronic headache."
+        "description": "**An analysis that took ~15 minutes per image now takes under 10 seconds**, enabling large-scale studies of the mechanism behind chronic headache. I adapted a foundation model (Cellpose-SAM) to detect and measure neurons in histology: with **just 31 annotated images**, I raised AP@50 **from 0.129 to 0.747 (nearly 6×)**, with an **F1 of 0.849** and Recall of 0.881 — meaning it finds the vast majority of neurons with few false detections and outlines each precisely enough to measure area and diameter, **with the error of each measurement quantified**. **First author of the paper, under peer review at Neuroinformatics**, with results presented at the **International Headache Congress (IHC) 2025**."
       },
       {
         "id": "cvnn",
@@ -214,7 +229,7 @@
           "Mitacs Globalink Research Award"
         ],
         "highlights": [],
-        "description": "Ongoing research supervised by **Prof. Roberto Budzinski** in the Department of Neuroscience at the University of Lethbridge."
+        "description": "Ongoing research supervised by **[Prof. Roberto Budzinski](https://www.ulethbridge.ca/unews/article/university-lethbridge-neuroscientist-receives-canada-research-chair)** in the Department of Neuroscience at the University of Lethbridge."
       },
       {
         "id": "portfolio",
@@ -310,6 +325,7 @@
     "instagram": "Thiago Zilli on Instagram (opens in a new tab)",
     "linkedin": "Thiago Zilli on LinkedIn (opens in a new tab)",
     "orcid": "Thiago Zilli on ORCID (opens in a new tab)",
-    "github": "Thiago Zilli on GitHub (opens in a new tab)"
+    "github": "Thiago Zilli on GitHub (opens in a new tab)",
+    "youtube": "Thiago Zilli's YouTube (opens in a new tab)"
   }
 }

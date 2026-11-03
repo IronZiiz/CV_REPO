@@ -58,7 +58,7 @@ const LINKS: Record<string, { demo?: string; code?: string }> = {
   finetuning: { code: 'https://github.com/IronZiiz/Domain-specific_finetunning' },
   cvnn: { code: 'https://github.com/budzinskilab' },
   // This site: the repository holds both the app and the context-engineering docs.
-  portfolio: { demo: 'https://github.com/IronZiiz/CV_REPO' },
+  portfolio: { code: 'https://github.com/IronZiiz/CV_REPO' },
 }
 
 // SITE_LAYOUT (Projetos): left column, then a right column that starts lower.

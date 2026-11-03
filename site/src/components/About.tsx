@@ -1,8 +1,9 @@
-import { useRef } from 'react'
+import { useRef, type ReactNode } from 'react'
 
 import alura from '@/assets/img/alura.jpg'
 import lethbridge from '@/assets/img/lethbridge.png'
 import ufpr from '@/assets/img/ufpr.png'
+import { BrazilFlag, UsaFlag } from '@/components/flag-icons'
 import { RichText } from '@/components/RichText'
 import { SocialLinks } from '@/components/SocialLinks'
 import { Timeline, TimelineSection } from '@/components/Timeline'
@@ -19,12 +20,18 @@ const EDUCATION_LOGOS: Record<string, { src: string; className: string }> = {
   alura: { src: alura, className: 'size-14 rounded-full object-cover sm:size-18' },
 }
 
+// Flags are drawn as SVG (flag-icons) so they render the same on every system.
+const FLAGS: Record<string, ((props: { title: string }) => ReactNode) | undefined> = {
+  pt: ({ title }) => <BrazilFlag title={title} />,
+  en: ({ title }) => <UsaFlag title={title} />,
+}
+
 // Timeline padding is symmetric from sm up, so mx-auto centres the cards on the page.
 const cardsColumn = 'md:mx-auto md:max-w-[min(100%,60rem)]'
 
 export function About() {
   const { dict } = useI18n()
-  const { whoAmI, stack, education, contact } = dict.about
+  const { whoAmI, stack, education, languages, contact } = dict.about
   const timelineRef = useRef<HTMLDivElement>(null)
   // Same reading focus as Projetos: sections out of focus fade back.
   const inFocus = useReadingFocus(timelineRef, 'block')
@@ -94,6 +101,25 @@ export function About() {
               </li>
             )
           })}
+        </ul>
+      </TimelineSection>
+
+      <TimelineSection id="linguas" title={languages.title} dimmed={dimmed('linguas')}>
+        {/* Two cards side by side: the flag, the language and the level. */}
+        <ul className={`grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 ${cardsColumn}`}>
+          {languages.items.map((item) => (
+            <li key={item.id}>
+              <GlowCard className="h-full p-4" contentClassName="flex items-center gap-3 sm:gap-4">
+                {FLAGS[item.id]?.({ title: item.name })}
+                <div className="min-w-0">
+                  <h3 className="text-lg font-bold wrap-break-word text-brand sm:text-xl">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">{item.level}</p>
+                </div>
+              </GlowCard>
+            </li>
+          ))}
         </ul>
       </TimelineSection>
 

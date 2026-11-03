@@ -27,8 +27,8 @@
     "whoAmI": {
       "title": "Quem sou eu?",
       "paragraphs": [
-        "**Cientista de Dados com experiência profissional de dois anos** em commercial analytics (análise de dados comerciais), análise de dados e CRM na indústria RCM Cabos Elétricos. **Bacharel em Física pela Universidade Federal do Paraná (UFPR)**, com período de **pesquisa internacional em neurociência computacional** na University of Lethbridge (Canadá).",
-        "Minha trajetória acadêmica foi direcionada à tecnologia: conduzi, em colaboração com a Farmacologia, um projeto de **fine-tuning (ajuste fino) de modelos de segmentação de imagem** para neurônios do gânglio trigêmeo, aplicando visão computacional e processamento de imagem para extrair propriedades morfométricas (área, diâmetro, entre outras). O objetivo foi criar uma ferramenta de pesquisa automatizada, com erro quantificável, que **transformasse horas de trabalho manual em segundos**, possibilitando mais estudos sobre o mecanismo da dor de cabeça crônica. Os primeiros resultados foram apresentados no congresso internacional **International Headache Congress (IHC) 2025**, em São Paulo, e o artigo está em processo de publicação, **em revisão por pares na revista Neuroinformatics**.",
+        "**Cientista de Dados com 2 anos de experiência** em commercial analytics (análise de dados comerciais) e CRM na **RCM Cabos Elétricos**. Substituí planilhas de Excel descentralizadas por uma **fonte única de dados** com pipeline (fluxo automatizado de extração e tratamento de dados) **diário e auditável**, que alimenta **3 dashboards (painéis analíticos)** para a diretoria: visão geral da empresa, desempenho dos vendedores e visão de clientes. Também desenvolvi uma **previsão de receita mensal com Prophet** (MAPE (erro absoluto médio) de **~9%**, até três meses à frente) e uma **API em FastAPI** que integra esses dados aos sistemas dos times comercial e financeiro. **Bacharel em Física pela UFPR**, com **[pesquisa internacional em neurociência computacional](https://www.budzinskilab.ca)** na University of Lethbridge (Canadá).",
+        "Na pesquisa, participei de um projeto de **fine-tuning (ajuste fino) do Cellpose-SAM** para identificar e medir neurônios em histologia, em colaboração com a Farmacologia, e **sou primeiro autor do artigo resultante**. Com apenas **31 imagens anotadas**, a AP@50 (average precision com sobreposição mínima de 50%), principal métrica de segmentação, subiu **de 0,129 para 0,747**. Na contagem de neurônios, o F1-score chegou a **0,85**. A análise passou de **~15 minutos para menos de 10 segundos por imagem**, com erro quantificado nas medidas morfométricas. O trabalho foi apresentado no **International Headache Congress (IHC) 2025** e está **em revisão na Neuroinformatics**.",
         "Ainda na graduação, fui aluno especial na pós-graduação em **Deep Learning (aprendizado profundo)**, realizei disciplinas como **Algoritmos e Estrutura de Dados I** e **Estatística**, e fui gerente de projetos na empresa júnior [Mathmorphosis](https://www.instagram.com/mathmorphosis/), onde **liderei a equipe no [I Hackathon de Dados da UFPR](https://ufpr.br/eventos/hackathon-ia/)**, onde conquistamos o **Top 3**."
       ]
     },
@@ -115,6 +115,21 @@
         }
       ]
     },
+    "languages": {
+      "title": "Línguas",
+      "items": [
+        {
+          "id": "pt",
+          "name": "Português",
+          "level": "Fluente (nativo)"
+        },
+        {
+          "id": "en",
+          "name": "Inglês",
+          "level": "Profissional avançado"
+        }
+      ]
+    },
     "contact": {
       "title": "Contato",
       "text": "Tenho interesse particular em **problemas interdisciplinares**, sejam entre setores de uma empresa, ou entre farmacologia, neurociência e física. :)"
@@ -145,7 +160,7 @@
           "Docker"
         ],
         "highlights": [],
-        "description": "**Projetei e construí, do zero**, uma plataforma de analytics (análise de dados) para uma indústria com baixa maturidade em análise de dados: pipeline (fluxo automatizado de dados) **diário e auditável sobre milhões de registros** e anos de histórico, modelo de risco de clientes combinando regras de negócio com LRFM e sentimento via NLP (processamento de linguagem natural) e LLM (grandes modelos de linguagem), e **previsão de receita com Prophet**. **Adotada pela Diretoria e pelo time Comercial**."
+        "description": "**Substituiu planilhas descentralizadas** cujos indicadores divergiam entre relatórios e **possibilitou a adoção de uma fonte de verdade e de consulta** para a diretoria e os times comerciais. Entrevistei duas áreas para traduzir a dor do negócio em **9 objetivos**, e **cortei 3 inviáveis com justificativa documentada antes da primeira linha de código**. Construí sozinho, ponta a ponta: pipeline **diário e auditável** sobre dois bancos PostgreSQL, segmentação **LRFM**, cross-selling, **previsão de receita com Prophet** e classificação de sentimento por LLM (grandes modelos de linguagem). Um **detector estatístico de desconto fora da alçada** **transformou uma suspeita da diretoria em evidência quantificada e auditável**. Reduzi o consumo de memória do pipeline em **80%**, eliminando falhas em máquinas de 8 GB."
       },
       {
         "id": "api",
@@ -162,7 +177,7 @@
           "Testes automatizados"
         ],
         "highlights": [],
-        "description": "Projetei e desenvolvi uma API REST em uma arquitetura modular por domínio (MVC), expondo **203 endpoints (pontos de acesso da API) analíticos** consumidos por sistemas internos da empresa (CRM), **sem alterar a lógica de negócio**. Padronizei o contrato de resposta, automatizei testes de acoplamento e documentei tudo com Swagger."
+        "description": "**Desbloqueou a camada analítica**: as análises estavam presas dentro do Streamlit e nenhum outro sistema da empresa conseguia consumi-las. Em **2 semanas**, construí uma API em arquitetura modular por domínio de negócio, com **203 endpoints (pontos de acesso)**, contrato de resposta único, validação Pydantic v2 e tratamento de erro centralizado. Criei um **smoke test de acoplamento com 704 chamadas em ~55s**, que **encontrou 2 bugs reais** na camada analítica, ambos corrigidos. **A lógica de negócio ficou intocada** e tudo foi documentado com Swagger."
       },
       {
         "id": "hackathon",
@@ -180,7 +195,7 @@
         "highlights": [
           "Top 3"
         ],
-        "description": "**Liderei uma equipe de 3 pessoas** e, **em 5 dias**, construímos uma plataforma de visualização para dados reais utilizando pesquisas de avaliação institucional da UFPR, com índice de sentimento e gráficos de saldo de opinião. Ficamos entre as 5 equipes finalistas, de mais de 10 participantes, e **conquistamos o Top 3**; a solução foi **considerada para futuro uso nas plataformas da universidade**."
+        "description": "**Top 3 entre mais de 10 equipes**, e a solução foi **considerada para uso futuro nas plataformas da universidade**. **Liderei uma equipe de 3 pessoas** e, **em 5 dias**, construímos uma plataforma de visualização sobre dados reais de avaliação institucional da UFPR, com índice de sentimento e gráficos de saldo de opinião que tornaram legíveis respostas que antes estavam em planilhas de Excel escondidas nos sites da universidade."
       },
       {
         "id": "finetuning",
@@ -198,7 +213,7 @@
         "highlights": [
           "Artigo submetido"
         ],
-        "description": "**Primeiro autor de artigo em revisão por pares na Neuroinformatics**. Adaptei um modelo de fundação de segmentação celular (Cellpose-SAM) para detectar e medir neurônios em histologia, elevando o AP@50 (Average Precision, precisão média) **de 0,129 para 0,747 (quase 6×)** e atingindo **F1 de 0,849** e Recall (revocação) de 0,881, com **apenas 31 imagens** e 1.801 objetos anotados, proporcionando uma ferramenta automática com erro quantificável para realizar estudos morfológicos e contribuir para a pesquisa na identificação de mecanismos de dores de cabeça crônica."
+        "description": "**Uma análise que levava ~15 minutos por imagem passou a levar menos de 10 segundos**, viabilizando estudos em larga escala sobre o mecanismo da dor de cabeça crônica. Adaptei um modelo de fundação (Cellpose-SAM) para detectar e medir neurônios em histologia: com **apenas 31 imagens anotadas**, elevei o AP@50 **de 0,129 para 0,747 (quase 6×)**, com **F1 de 0,849** e Recall de 0,881 — ou seja, encontra a grande maioria dos neurônios com poucas detecções falsas e delimita cada um com precisão suficiente para medir área e diâmetro, **com o erro de cada medida quantificado**. **Primeiro autor do artigo, em revisão por pares na Neuroinformatics**, com resultados apresentados no **International Headache Congress (IHC) 2025**."
       },
       {
         "id": "cvnn",
@@ -214,7 +229,7 @@
           "Mitacs Globalink Research Award"
         ],
         "highlights": [],
-        "description": "Pesquisa em andamento sob orientação do **Prof. Roberto Budzinski** no departamento de neurociência da Universidade de Lethbridge."
+        "description": "Pesquisa em andamento sob orientação do **[Prof. Roberto Budzinski](https://www.ulethbridge.ca/unews/article/university-lethbridge-neuroscientist-receives-canada-research-chair)** no departamento de neurociência da Universidade de Lethbridge."
       },
       {
         "id": "portfolio",
@@ -310,6 +325,7 @@
     "instagram": "Instagram de Thiago Zilli (abre em nova aba)",
     "linkedin": "LinkedIn de Thiago Zilli (abre em nova aba)",
     "orcid": "ORCID de Thiago Zilli (abre em nova aba)",
-    "github": "GitHub de Thiago Zilli (abre em nova aba)"
+    "github": "GitHub de Thiago Zilli (abre em nova aba)",
+    "youtube": "YouTube de Thiago Zilli (abre em nova aba)"
   }
 }
