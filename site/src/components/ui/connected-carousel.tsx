@@ -55,14 +55,19 @@ function layout(cw: number, height: number) {
   let farW = 0
 
   if (tier === 'desktop') {
-    // Open card on 8 of the 12 columns; each side keeps 2 columns + 2 gutters,
-    // split into a 1-column sliver (+ a gutter) and a 1-column sliver.
+    // Open card at 70% of an 8-column span; each side splits what is left into a
+    // wider near card and a narrower far one.
     const col = (cw - 11 * GUTTER) / 12
-    activeW = 8 * col + 7 * GUTTER
-    sideW = col + GUTTER
-    farW = col
+    activeW = 0.7 * (8 * col + 7 * GUTTER)
+    const side = (cw - activeW) / 2 - 2 * gap
+    sideW = side * 0.58
+    farW = side - sideW
+  } else if (tier === 'tablet') {
+    activeW = 0.7 * (cw - 2 * (gap + 72))
+    sideW = (cw - activeW) / 2 - gap
   } else {
-    sideW = tier === 'tablet' ? 72 : 28
+    // Phones keep the full width: 30% narrower would leave the text column too thin.
+    sideW = 28
     activeW = cw - 2 * (gap + sideW)
   }
 
@@ -221,13 +226,20 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                     >
                       <div className="relative size-full overflow-hidden rounded-[clamp(14px,1.6vw,24px)] bg-background/60">
                         {item.image && (
-                          <img src={item.image} alt="" draggable={false} className="absolute inset-0 size-full object-cover opacity-60" />
+                          <img src={item.image} alt="" draggable={false} className="absolute inset-0 size-full object-cover object-top opacity-90" />
                         )}
-                        <span className="absolute inset-0 bg-linear-to-t from-surface/90 via-surface/40 to-transparent" />
-                        {tier !== 'mobile' && (
-                          <span className="absolute inset-x-0 bottom-4 mx-auto block max-h-[calc(100%-2rem)] w-fit rotate-180 truncate text-sm font-bold text-brand [writing-mode:vertical-rl]">
+                        <span className="absolute inset-0 bg-linear-to-t from-surface/95 via-surface/30 to-transparent" />
+                        {/* Wide slivers read the name across, narrow ones up the side. */}
+                        {slots[offset].width >= 140 ? (
+                          <span className="absolute inset-x-3 bottom-3 line-clamp-3 text-sm leading-snug font-bold text-brand">
                             {item.label}
                           </span>
+                        ) : (
+                          tier !== 'mobile' && (
+                            <span className="absolute inset-x-0 bottom-4 mx-auto block max-h-[calc(100%-2rem)] w-fit rotate-180 truncate text-sm font-bold text-brand [writing-mode:vertical-rl]">
+                              {item.label}
+                            </span>
+                          )
                         )}
                       </div>
                       {!active && (
@@ -260,14 +272,19 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                 </motion.div>
               )
             })}
+
+            {/* At the open card's middle, one on each edge of the row. */}
+            <button type="button" onClick={() => go(-1)} aria-label={prevLabel} className={cn(arrow, 'left-0')}>
+              <ChevronLeft size={22} aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => go(1)} aria-label={nextLabel} className={cn(arrow, 'right-0')}>
+              <ChevronRight size={22} aria-hidden="true" />
+            </button>
           </div>
         )}
 
-        {/* Arrows around one tab per item; the open tab fills up until autoplay moves on. */}
-        <div className="mt-6 flex items-center justify-center gap-4">
-          <button type="button" onClick={() => go(-1)} aria-label={prevLabel} className={arrow}>
-            <ChevronLeft size={20} aria-hidden="true" />
-          </button>
+        {/* One tab per item; the open tab fills up until autoplay moves on. */}
+        <div className="mt-6 flex items-center justify-center">
           <div role="tablist" aria-label={label} className="flex items-center gap-1.5">
             {items.map((item, index) => {
               const selected = index === activeIndex
@@ -298,9 +315,6 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
               )
             })}
           </div>
-          <button type="button" onClick={() => go(1)} aria-label={nextLabel} className={arrow}>
-            <ChevronRight size={20} aria-hidden="true" />
-          </button>
         </div>
       </div>
     </MotionConfig>
@@ -308,4 +322,4 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
 }
 
 const arrow =
-  'inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-brand text-brand transition-colors hover:bg-brand hover:text-on-brand'
+  'absolute top-1/2 z-20 inline-flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-brand bg-background/85 text-brand shadow-sm backdrop-blur-sm transition-colors hover:bg-brand hover:text-on-brand'

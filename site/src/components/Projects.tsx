@@ -16,15 +16,24 @@ import { cn } from '@/lib/utils'
 
 type Project = Dictionary['projects']['items'][number]
 
-// Images from IMGS/, with the framing for a tall panel. CVNN and this portfolio have
-// none: their open card is text only, and their sliver a plain surface.
-const MEDIA: Record<string, { src: string; position: string } | undefined> = {
-  dashboard: { src: dashboard, position: 'object-left-top' },
-  api: { src: api, position: 'object-left-top' },
+// Images from IMGS/, shown behind the open card and on its sliver. CVNN and this
+// portfolio have none: their card is a plain surface.
+const COVER = 'inset-0 size-full object-cover'
+
+// The two wide screenshots at 70% of the height a cover would give them (30% less
+// zoom), centred along the top edge.
+const ZOOMED_OUT = 'top-0 left-1/2 h-[70%] w-auto max-w-none -translate-x-1/2'
+
+const MEDIA: Record<string, { src: string; fit: string } | undefined> = {
+  dashboard: { src: dashboard, fit: ZOOMED_OUT },
+  api: { src: api, fit: ZOOMED_OUT },
   // Portrait photo: keep the band with the faces.
-  hackathon: { src: hackathon, position: 'object-[center_27%]' },
-  finetuning: { src: finetuning, position: 'object-left-top' },
+  hackathon: { src: hackathon, fit: `${COVER} object-[center_27%]` },
+  finetuning: { src: finetuning, fit: `${COVER} object-top` },
 }
+
+// Background fade: the image shows at the top and dissolves before the text gets dense.
+const FADE = 'linear-gradient(to bottom, black 0%, rgb(0 0 0 / 0.55) 30%, transparent 70%)'
 
 // The two RCM projects: the source is closed, and the demo runs on fictitious data.
 // DEMO_URL is pending: until it is filled in, the card shows the note without a button.
@@ -49,7 +58,7 @@ const ORDER = ['dashboard', 'api', 'hackathon', 'finetuning', 'cvnn', 'portfolio
 const outlineButton =
   'inline-flex items-center gap-2 rounded-full border border-brand px-4 py-1.5 text-sm font-semibold text-brand transition-colors hover:bg-brand hover:text-on-brand'
 
-// The open card: text on the left, the image on the right (on top on phones).
+// The open card: the project's image as a fading background, the text over it.
 function ProjectContent({ project }: { project: Project }) {
   const { t, dict } = useI18n()
   const [galleryOpen, setGalleryOpen] = useState(false)
@@ -61,44 +70,67 @@ function ProjectContent({ project }: { project: Project }) {
   const primary = closedSource ? DEMO_URL || undefined : links.demo ?? links.code
   const media = MEDIA[project.id]
 
-  const image = media && (
-    <img
-      src={media.src}
-      alt=""
-      draggable={false}
-      className={cn('absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]', media.position)}
-    />
+  const title = (
+    <>
+      {project.title}{' '}
+      {project.institution && <span className="font-normal">{project.institution}</span>}
+    </>
   )
-  const imageFrame = 'group relative block h-40 w-full shrink-0 overflow-hidden rounded-[clamp(14px,1.6vw,22px)] bg-background/60 md:h-auto md:w-[34%]'
+  const titleAction = 'text-left underline-offset-4 hover:underline'
 
   return (
-    <div className="flex h-full flex-col gap-4 p-4 sm:p-6 md:flex-row md:gap-6 lg:p-7">
-      <div className="flex min-w-0 flex-1 flex-col">
-        <h3 className="text-xl leading-tight font-bold text-brand lg:text-2xl">
-          {project.title}{' '}
-          {project.institution && <span className="font-normal">{project.institution}</span>}
-        </h3>
-        <p className="mt-1 text-base text-brand">{project.period}</p>
+    <div className="relative flex h-full flex-col p-4 sm:p-5">
+      {media && (
+        <img
+          src={media.src}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className={cn('pointer-events-none absolute opacity-35 dark:opacity-30', media.fit)}
+          style={{ maskImage: FADE, WebkitMaskImage: FADE }}
+        />
+      )}
 
-        <ul className="mt-3 flex flex-wrap gap-1.5">
+      <div className="relative flex min-w-0 flex-1 flex-col">
+        {/*
+         * The title does what the whole card did before: a closed-source project opens
+         * its gallery (same as "ver imagens ilustrativas"), the others open their link.
+         */}
+        <h3 className="text-lg leading-tight font-bold text-brand">
+          {closedSource && gallery.length > 0 ? (
+            <button type="button" onClick={() => setGalleryOpen(true)} className={cn(titleAction, 'cursor-pointer')}>
+              {title}
+            </button>
+          ) : primary ? (
+            <a href={primary} target="_blank" rel="noopener noreferrer" className={titleAction}>
+              {title}
+              <span className="sr-only"> {t('projects.newTab')}</span>
+            </a>
+          ) : (
+            title
+          )}
+        </h3>
+        <p className="mt-0.5 text-sm text-brand">{project.period}</p>
+
+        <ul className="mt-2.5 flex flex-wrap gap-1">
           {project.chips.map((chip) => (
-            <li key={chip} className="rounded-md border border-border bg-background/70 px-2 py-0.5 text-xs font-semibold text-muted-foreground sm:text-sm">
+            <li key={chip} className="rounded-md border border-border bg-background/70 px-1.5 py-0.5 text-xs font-semibold text-muted-foreground">
               {chip}
             </li>
           ))}
           {project.highlights.map((chip) => (
-            <li key={chip} className="rounded-md border border-brand/50 bg-background px-2 py-0.5 text-xs font-bold text-brand sm:text-sm">
+            <li key={chip} className="rounded-md border border-brand/50 bg-background px-1.5 py-0.5 text-xs font-bold text-brand">
               {chip}
             </li>
           ))}
         </ul>
 
-        <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground xl:text-base">
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           <RichText text={project.description} />
         </p>
 
         {closedSource ? (
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-4">
+          <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-3">
             <p className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground">
               <Lock size={15} aria-hidden="true" />
               {t('projects.copyright')}
@@ -115,7 +147,7 @@ function ProjectContent({ project }: { project: Project }) {
           </div>
         ) : (
           (links.demo || links.code) && (
-            <div className="mt-auto flex flex-wrap gap-3 pt-4">
+            <div className="mt-auto flex flex-wrap gap-2.5 pt-3">
               {links.demo && (
                 <ProjectLink href={links.demo} label={t('projects.demo')} newTab={t('projects.newTab')} icon={<ExternalLink size={16} aria-hidden="true" />} />
               )}
@@ -126,34 +158,6 @@ function ProjectContent({ project }: { project: Project }) {
           )
         )}
       </div>
-
-      {/*
-       * The image does what the card did before: a closed-source project opens its
-       * gallery (same as "ver imagens ilustrativas"), the others open their link.
-       */}
-      {media &&
-        (closedSource && gallery.length > 0 ? (
-          <button
-            type="button"
-            onClick={() => setGalleryOpen(true)}
-            aria-label={`${project.title} — ${t('projects.gallery')}`}
-            className={cn(imageFrame, 'order-first cursor-pointer md:order-none')}
-          >
-            {image}
-          </button>
-        ) : primary ? (
-          <a
-            href={primary}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.title} — ${links.demo ? t('projects.demo') : t('projects.code')} ${t('projects.newTab')}`}
-            className={cn(imageFrame, 'order-first md:order-none')}
-          >
-            {image}
-          </a>
-        ) : (
-          <div className={cn(imageFrame, 'order-first md:order-none')}>{image}</div>
-        ))}
 
       <ProjectGallery
         // Remounted per opening, so the carousel always starts at the first image.
