@@ -11,7 +11,10 @@
     "downloadCv": "Download CV",
     "downloadCvLabel": "Download CV (PDF file)",
     "darkMode": "Turn on dark mode",
-    "lightMode": "Turn on light mode"
+    "lightMode": "Turn on light mode",
+    "contact": "Quick contact",
+    "copyEmail": "Copy email",
+    "emailCopied": "Email copied!"
   },
   "hero": {
     "name": "Thiago Zilli,",

@@ -1,6 +1,7 @@
 import { Download, Globe, Moon, Sun } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
+import { ContactMenu } from '@/components/ContactMenu'
 import { useTheme } from '@/hooks/use-theme'
 import { useI18n } from '@/i18n/context'
 import { ABOUT_PANELS, PAGE_GRID, type AboutPanel } from '@/lib/layout'
@@ -98,6 +99,9 @@ export function Header({ inAbout, panel, onPanelChange }: HeaderProps) {
               <Download aria-hidden="true" size={20} />
             </span>
           </a>
+
+          {/* Right of the CV: the CV pill grows leftwards and would push it otherwise. */}
+          <ContactMenu buttonClassName={circle} />
 
           <CircleButton onClick={toggleTheme} aria-label={themeLabel} title={themeLabel}>
             {theme === 'dark' ? <Sun aria-hidden="true" size={20} /> : <Moon aria-hidden="true" size={20} />}

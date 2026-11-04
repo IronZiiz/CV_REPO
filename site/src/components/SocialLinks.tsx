@@ -6,10 +6,11 @@ import {
   YoutubeIcon,
 } from '@/components/brand-icons'
 import { useI18n } from '@/i18n/context'
+import { LINKEDIN_URL } from '@/lib/contact'
 
 const LINKS = [
   { key: 'instagram', href: 'https://www.instagram.com/physics_zilli', svg: <InstagramIcon /> },
-  { key: 'linkedin', href: 'https://www.linkedin.com/in/thiago-zilli-44881120a', svg: <LinkedinIcon /> },
+  { key: 'linkedin', href: LINKEDIN_URL, svg: <LinkedinIcon /> },
   { key: 'orcid', href: 'https://orcid.org/0009-0003-0503-1359', svg: <OrcidIcon /> },
   { key: 'github', href: 'https://github.com/IronZiiz', svg: <GithubIcon /> },
   { key: 'youtube', href: 'https://www.youtube.com/@thiagozilli3442', svg: <YoutubeIcon /> },
