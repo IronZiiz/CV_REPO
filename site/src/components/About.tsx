@@ -4,6 +4,7 @@ import alura from '@/assets/img/alura.jpg'
 import lethbridge from '@/assets/img/lethbridge.png'
 import ufpr from '@/assets/img/ufpr.png'
 import { BrazilFlag, UsaFlag } from '@/components/flag-icons'
+import { EagleHead, ToucanHead } from '@/components/language-mascots'
 import { RichText } from '@/components/RichText'
 import { SocialLinks } from '@/components/SocialLinks'
 import { GlowCard } from '@/components/ui/glow-card'
@@ -23,6 +24,28 @@ const EDUCATION_LOGOS: Record<string, { src: string; className: string }> = {
 const FLAGS: Record<string, ((props: { title: string }) => ReactNode) | undefined> = {
   pt: ({ title }) => <BrazilFlag title={title} />,
   en: ({ title }) => <UsaFlag title={title} />,
+}
+
+/*
+ * On hover, a head peeks out from behind each language card: the toucan slides out
+ * to the left of Português, the eagle to the right of English. Hidden at rest (the
+ * glass card would show them through), and left out for reduced motion.
+ */
+const peek =
+  'pointer-events-none absolute top-1/2 z-0 -translate-y-1/2 opacity-0 transition-[translate,rotate,opacity] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/lang:opacity-100 motion-reduce:hidden'
+
+const MASCOTS: Record<string, ReactNode> = {
+  // The neck end fades out, so the part still behind the glass leaves no hard edge.
+  pt: (
+    <ToucanHead
+      className={cn(peek, 'left-0 [mask-image:linear-gradient(to_right,black_68%,transparent)] group-hover/lang:-translate-x-[80px] group-hover/lang:-rotate-6')}
+    />
+  ),
+  en: (
+    <EagleHead
+      className={cn(peek, 'right-0 [mask-image:linear-gradient(to_left,black_68%,transparent)] group-hover/lang:translate-x-[80px] group-hover/lang:rotate-6')}
+    />
+  ),
 }
 
 // Lists inside a panel reuse the page columns (subgrid), so cards keep the 32px gutter.
@@ -121,8 +144,12 @@ export function About({ panel, enter }: AboutProps) {
       {panel === 'languages' && (
         <ul className={subgrid}>
           {languages.items.map((item, index) => (
-            <li key={item.id} className={cn('col-span-12 sm:col-span-6 lg:col-span-4', index === 0 && 'lg:col-start-3')}>
-              <GlowCard className="h-full p-4" contentClassName="flex items-center gap-3 sm:gap-4">
+            <li
+              key={item.id}
+              className={cn('group/lang relative isolate col-span-12 sm:col-span-6 lg:col-span-4', index === 0 && 'lg:col-start-3')}
+            >
+              {MASCOTS[item.id]}
+              <GlowCard className="relative z-10 h-full p-4" contentClassName="flex items-center gap-3 sm:gap-4">
                 {FLAGS[item.id]?.({ title: item.name })}
                 <div className="min-w-0">
                   <h3 className="text-lg font-bold wrap-break-word text-brand sm:text-xl">{item.name}</h3>
