@@ -1,6 +1,6 @@
 import { MotionConfig, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -36,10 +36,10 @@ const OFFSETS = [-3, -2, -1, 0, 1, 2, 3] as const
 
 const SPRING = { type: 'spring', stiffness: 220, damping: 26, mass: 0.75 } as const
 
-const GUTTER = 32
+// The side cards' fade eases out like the old reading focus (500 ms ease-out).
+const FADE_EASE = { duration: 0.5, ease: 'easeOut' } as const
 
-// Reading line a bit above the middle of the viewport, as in the old reading focus.
-const READING_LINE = 0.45
+const GUTTER = 32
 
 interface Slot {
   x: number
@@ -121,8 +121,8 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
   const [page, setPage] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [inFocus, setInFocus] = useState(false)
+  // Side cards stay a little faded until the visitor first changes card themselves.
+  const [engaged, setEngaged] = useState(false)
 
   const total = items.length
   const activeIndex = ((page % total) + total) % total
@@ -150,51 +150,29 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
   }, [activeW, items])
 
   const go = (diff: number) => setPage((current) => current + diff)
+  // A move made by the visitor (not autoplay): it also lifts the side cards' fade.
+  const userGo = (diff: number) => {
+    setEngaged(true)
+    go(diff)
+  }
 
   // Jump to a tab by the shortest way round the loop.
   function select(index: number) {
     let diff = index - activeIndex
     if (diff > total / 2) diff -= total
     else if (diff < -total / 2) diff += total
-    go(diff)
+    userGo(diff)
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     // The image gallery (a dialog inside a card) uses the arrows for its own images.
     if ((event.target as Element).closest('[role="dialog"]')) return
-    if (event.key === 'ArrowLeft') go(-1)
-    else if (event.key === 'ArrowRight') go(1)
+    if (event.key === 'ArrowLeft') userGo(-1)
+    else if (event.key === 'ArrowRight') userGo(1)
   }
-
-  // Whether the carousel is the block being read: its middle near the reading line,
-  // or the page scrolled to the bottom, where the line can no longer reach it.
-  useEffect(() => {
-    let frame = 0
-    const update = () => {
-      frame = 0
-      const track = trackRef.current
-      if (!track) return
-      const { top, bottom } = track.getBoundingClientRect()
-      const line = window.innerHeight * READING_LINE
-      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
-      setInFocus(atBottom || Math.abs((top + bottom) / 2 - line) < window.innerHeight * 0.2)
-    }
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update)
-    }
-    update()
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    return () => {
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
-      cancelAnimationFrame(frame)
-    }
-  }, [width, contentH])
 
   // Autoplay waits while the visitor is reading (pointer or focus inside).
   const paused = hovered || focused
-  const sharp = inFocus || hovered || focused
 
   return (
     <MotionConfig reducedMotion="user">
@@ -228,21 +206,28 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
         </div>
 
         {width > 0 && contentH > 0 && (
-          <div ref={trackRef} aria-live="polite" className="relative w-full" style={{ height: contentH }}>
+          <div aria-live="polite" className="relative w-full" style={{ height: contentH }}>
             {OFFSETS.map((offset) => {
               const virtualIndex = page + offset
               const item = items[((virtualIndex % total) + total) % total]
               const active = offset === 0
+              // Until the first change of card, the side cards sit back: 10% fainter, softly blurred.
+              const faded = !active && !engaged
               const showNotch = Math.abs(offset) === 1 || (Math.abs(offset) === 2 && tier === 'desktop')
 
               return (
                 <motion.div
                   key={virtualIndex}
                   initial={false}
-                  animate={{ ...slots[offset], zIndex: active ? 0 : 10 }}
-                  transition={SPRING}
+                  animate={{
+                    ...slots[offset],
+                    opacity: slots[offset].opacity * (faded ? 0.9 : 1),
+                    filter: faded ? 'blur(1px)' : 'blur(0px)',
+                    zIndex: active ? 0 : 10,
+                  }}
+                  transition={{ ...SPRING, opacity: FADE_EASE, filter: FADE_EASE }}
                   style={{ position: 'absolute', left: '50%', top: '50%', pointerEvents: slots[offset].opacity ? 'auto' : 'none' }}
-                  className="rounded-[clamp(20px,2.2vw,32px)] bg-surface shadow-[0_10px_30px_rgba(95,109,119,0.10),0_4px_12px_rgba(95,109,119,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.6),0_4px_12px_rgba(0,0,0,0.4)]"
+                  className="rounded-[clamp(10px,1vw,16px)] bg-surface shadow-[0_10px_30px_rgba(95,109,119,0.10),0_4px_12px_rgba(95,109,119,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.6),0_4px_12px_rgba(0,0,0,0.4)]"
                 >
                   {showNotch && (
                     <Notch side={offset < 0 ? 'left' : 'right'} width={gap + 2} height={Math.abs(offset) === 1 ? 42 : 28} />
@@ -257,7 +242,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                       className="absolute inset-0 p-1.5"
                     >
                       {/* The name is not in here: it runs on the ring below the cards. */}
-                      <div className="relative size-full overflow-hidden rounded-[clamp(14px,1.6vw,24px)] bg-background/60">
+                      <div className="relative size-full overflow-hidden rounded-[clamp(6px,0.7vw,11px)] bg-background/60">
                         {item.image && (
                           <img src={item.image} alt="" draggable={false} className="absolute inset-0 size-full object-cover object-top opacity-90" />
                         )}
@@ -267,7 +252,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                           type="button"
                           tabIndex={-1}
                           aria-hidden="true"
-                          onClick={() => go(offset)}
+                          onClick={() => userGo(offset)}
                           className="absolute inset-0 cursor-pointer"
                         />
                       )}
@@ -294,23 +279,6 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
             })}
 
             {/*
-             * The area around the open card, blurred until the carousel is the block being
-             * read (as Sobre/Projetos did on scroll); hovering or focusing it clears it too.
-             */}
-            {(['left', 'right'] as const).map((side) => (
-              <div
-                key={side}
-                aria-hidden="true"
-                className={cn(
-                  'pointer-events-none absolute inset-y-0 z-20 transition-[backdrop-filter,background-color] duration-500 ease-out contrast-more:bg-transparent contrast-more:backdrop-blur-[0px]',
-                  side === 'left' ? 'left-0' : 'right-0',
-                  sharp ? 'bg-transparent backdrop-blur-[0px]' : 'bg-background/30 backdrop-blur-[3px]',
-                )}
-                style={{ width: (width - activeW) / 2 }}
-              />
-            ))}
-
-            {/*
              * The ring: each side card's full name under it. The cards shrink and rise
              * towards the edges, so the names follow the carousel's curve.
              */}
@@ -330,7 +298,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                       x: slot.x + slot.width / 2 - labelW / 2,
                       y: slot.y + slot.height + 12,
                       width: labelW,
-                      fontSize: near ? 13 : 11.5,
+                      fontSize: near ? 12 : 10.5,
                       opacity: offset === 0 ? 0 : slot.opacity * (near ? 1 : 0.8),
                     }}
                     transition={SPRING}
@@ -343,10 +311,10 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
               })}
 
             {/* At the open card's middle, one on each edge of the row. */}
-            <button type="button" onClick={() => go(-1)} aria-label={prevLabel} className={cn(arrow, 'left-0')}>
+            <button type="button" onClick={() => userGo(-1)} aria-label={prevLabel} className={cn(arrow, 'left-0')}>
               <ChevronLeft size={22} aria-hidden="true" />
             </button>
-            <button type="button" onClick={() => go(1)} aria-label={nextLabel} className={cn(arrow, 'right-0')}>
+            <button type="button" onClick={() => userGo(1)} aria-label={nextLabel} className={cn(arrow, 'right-0')}>
               <ChevronRight size={22} aria-hidden="true" />
             </button>
           </div>
