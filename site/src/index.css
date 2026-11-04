@@ -333,3 +333,12 @@
     }
   }
 }
+
+/* Projetos row: scrolls by swipe, trackpad or the arrow buttons, without a visible bar. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

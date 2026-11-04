@@ -143,6 +143,8 @@
   },
   "projects": {
     "title": "Projects",
+    "rowPrev": "Previous projects",
+    "rowNext": "Next projects",
     "demo": "View project",
     "code": "View code",
     "newTab": "(opens in a new tab)",

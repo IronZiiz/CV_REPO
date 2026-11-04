@@ -143,6 +143,8 @@
   },
   "projects": {
     "title": "Projetos",
+    "rowPrev": "Projetos anteriores",
+    "rowNext": "Próximos projetos",
     "demo": "Ver projeto",
     "code": "Ver código",
     "newTab": "(abre em nova aba)",

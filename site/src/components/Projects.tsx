@@ -1,4 +1,4 @@
-import { ExternalLink, Images, Lock } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, Images, Lock } from 'lucide-react'
 import { useRef, useState, type ReactNode } from 'react'
 
 import api from '@/assets/img/api.jpg'
@@ -10,15 +10,15 @@ import { ProjectGallery, type GalleryItem } from '@/components/ProjectGallery'
 import { RichText } from '@/components/RichText'
 import { SocialLinks } from '@/components/SocialLinks'
 import { GlowCard } from '@/components/ui/glow-card'
-import { OUT_OF_FOCUS, useReadingFocus } from '@/hooks/use-reading-focus'
 import { useI18n, type Dictionary } from '@/i18n/context'
+import { PAGE_GRID } from '@/lib/layout'
 import { cn } from '@/lib/utils'
 
 type Project = Dictionary['projects']['items'][number]
 
 interface Media {
   src: string
-  // Framing inside the wide header.
+  // Framing inside the poster.
   fit: string
   // Wash over the image so the title stays readable; strongest where the text sits.
   wash?: string
@@ -34,7 +34,7 @@ const SCREENSHOT = 'origin-top-left scale-[1.04] object-left-top group-hover:sca
 const MEDIA: Record<string, Media | undefined> = {
   dashboard: { src: dashboard, fit: SCREENSHOT },
   api: { src: api, fit: SCREENSHOT },
-  // Portrait photo in a wide header: frame the band with the faces.
+  // Portrait photo in a wide poster: frame the band with the faces.
   // A photo with dark clothing: a stronger wash than the screenshots.
   hackathon: {
     src: hackathon,
@@ -61,18 +61,12 @@ const LINKS: Record<string, { demo?: string; code?: string }> = {
   portfolio: { code: 'https://github.com/IronZiiz/CV_REPO' },
 }
 
-// SITE_LAYOUT (Projetos): left column, then a right column that starts lower.
-const LEFT = ['dashboard', 'hackathon', 'cvnn']
-const RIGHT = ['api', 'finetuning', 'portfolio']
-// Single-column (mobile) reading order follows the zigzag.
-const MOBILE_ORDER: Record<string, string> = {
-  dashboard: 'max-md:order-1',
-  api: 'max-md:order-2',
-  hackathon: 'max-md:order-3',
-  finetuning: 'max-md:order-4',
-  cvnn: 'max-md:order-5',
-  portfolio: 'max-md:order-6',
-}
+// Left-to-right order of the row.
+const ORDER = ['dashboard', 'api', 'hackathon', 'finetuning', 'cvnn', 'portfolio']
+
+// 1 card per view on phones (with a peek of the next), 2 from sm, 3 from lg. With the
+// 32px gutter (gap-8), three cards line up with columns 1–4, 5–8 and 9–12.
+const CARD_WIDTH = 'w-[85%] sm:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)]'
 
 function Backdrop({ media }: { media: Media | undefined }) {
   if (media === undefined) return null
@@ -89,7 +83,7 @@ function Backdrop({ media }: { media: Media | undefined }) {
   )
 }
 
-function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean }) {
+function ProjectCard({ project }: { project: Project }) {
   const { t, dict } = useI18n()
   const [galleryOpen, setGalleryOpen] = useState(false)
   // The dictionary types the galleries per project id; only some projects have one.
@@ -102,27 +96,21 @@ function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean })
 
   const heading = (
     <>
-      <h3 className="text-[clamp(1.15rem,1.7vw,1.75rem)] leading-tight font-bold text-brand">
+      <h3 className="text-lg leading-tight font-bold text-brand xl:text-xl">
         {project.title}{' '}
         {project.institution && <span className="font-normal">{project.institution}</span>}
       </h3>
-      <p className="mt-1 text-[clamp(1rem,1.4vw,1.5rem)] text-brand">{project.period}</p>
+      <p className="mt-1 text-base text-brand">{project.period}</p>
     </>
   )
 
   return (
-    <article
-      data-project={project.id}
-      className={cn(
-        MOBILE_ORDER[project.id],
-        'transition-[opacity,filter] duration-500 ease-out',
-        dimmed && OUT_OF_FOCUS,
-      )}
-    >
+    <li data-project={project.id} className={cn('flex shrink-0 snap-start flex-col', CARD_WIDTH)}>
+      {/* The poster: image, title and period, like a tile in a streaming row. */}
       <GlowCard
         backdrop={<Backdrop media={media} />}
         // Lighter grain over screenshots so the date stays readable.
-        className="min-h-[clamp(9rem,12vw,13rem)] [&_.glass-noise]:opacity-[0.06]"
+        className="min-h-48 [&_.glass-noise]:opacity-[0.06]"
         contentClassName="h-full"
       >
         {/*
@@ -155,24 +143,25 @@ function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean })
 
       <ul className="mt-3 flex flex-wrap gap-2">
         {project.chips.map((chip) => (
-          <li key={chip} className="rounded-md border border-border bg-surface px-2 py-0.5 text-sm font-semibold text-muted-foreground sm:text-base">
+          <li key={chip} className="rounded-md border border-border bg-surface px-2 py-0.5 text-sm font-semibold text-muted-foreground">
             {chip}
           </li>
         ))}
         {project.highlights.map((chip) => (
-          <li key={chip} className="rounded-md border border-brand/50 bg-background px-2 py-0.5 text-sm font-bold text-brand sm:text-base">
+          <li key={chip} className="rounded-md border border-brand/50 bg-background px-2 py-0.5 text-sm font-bold text-brand">
             {chip}
           </li>
         ))}
       </ul>
 
-      <p className="mt-4 text-[clamp(1rem,1.35vw,1.45rem)] leading-relaxed text-muted-foreground md:text-justify">
+      <p className="mt-4 text-[0.95rem] leading-relaxed text-muted-foreground xl:text-base">
         <RichText text={project.description} />
       </p>
 
+      {/* mt-auto keeps the buttons on one line across the row, under the longest text. */}
       {closedSource ? (
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground sm:text-base">
+        <div className="mt-auto flex flex-wrap items-center gap-3 pt-4">
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground">
             <Lock size={15} aria-hidden="true" />
             {t('projects.copyright')}
           </p>
@@ -197,7 +186,7 @@ function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean })
         </div>
       ) : (
         (links.demo || links.code) && (
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-auto flex flex-wrap gap-3 pt-4">
             {links.demo && (
               <ProjectLink href={links.demo} label={t('projects.demo')} newTab={t('projects.newTab')} icon={<ExternalLink size={16} aria-hidden="true" />} />
             )}
@@ -216,7 +205,7 @@ function ProjectCard({ project, dimmed }: { project: Project; dimmed: boolean })
         onClose={() => setGalleryOpen(false)}
         label={`${project.title} — ${t('projects.gallery')}`}
       />
-    </article>
+    </li>
   )
 }
 
@@ -235,33 +224,59 @@ function ProjectLink({ href, label, newTab, icon }: { href: string; label: strin
   )
 }
 
-export function Projects() {
-  const { dict } = useI18n()
-  const byId = Object.fromEntries(dict.projects.items.map((item) => [item.id, item]))
-  const gridRef = useRef<HTMLDivElement>(null)
-  const inFocus = useReadingFocus(gridRef, 'project')
+const arrow =
+  'inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-brand text-brand transition-[background-color,color,opacity] hover:bg-brand hover:text-on-brand disabled:cursor-default disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-brand'
 
-  const column = (ids: string[], className?: string) => (
-    <div className={cn('contents md:flex md:flex-col md:gap-[clamp(9rem,18vw,18rem)]', className)}>
-      {ids.map((id) => (
-        <ProjectCard key={id} project={byId[id]} dimmed={inFocus !== null && inFocus !== id} />
-      ))}
-    </div>
-  )
+// One horizontal row of project cards on the page grid, scrolled by swipe or arrows.
+export function Projects() {
+  const { dict, t } = useI18n()
+  const byId = Object.fromEntries(dict.projects.items.map((item) => [item.id, item]))
+  const rowRef = useRef<HTMLUListElement>(null)
+  // Six cards never fit in one view, so the row always starts with more to the right.
+  const [edges, setEdges] = useState({ start: true, end: false })
+
+  function updateEdges() {
+    const row = rowRef.current
+    if (!row) return
+    setEdges({ start: row.scrollLeft <= 1, end: row.scrollLeft + row.clientWidth >= row.scrollWidth - 1 })
+  }
+
+  // One full view per click (plus the gutter), like paging a streaming row.
+  function scrollRow(direction: 1 | -1) {
+    const row = rowRef.current
+    if (!row) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    row.scrollBy({ left: direction * (row.clientWidth + 32), behavior: reduced ? 'auto' : 'smooth' })
+  }
 
   return (
-    <section aria-labelledby="projetos" className="px-4 pt-[clamp(2rem,4vw,4rem)] pb-16 sm:px-[5.5vw]">
-      <h2 id="projetos" className="sr-only">
-        {dict.projects.title}
-      </h2>
-      <div className="relative">
-        <span aria-hidden="true" className="absolute top-0 bottom-0 left-1 w-1 bg-brand md:left-1/2 md:-translate-x-1/2" />
-        <div ref={gridRef} className="flex flex-col gap-28 pl-8 md:grid md:grid-cols-2 md:gap-x-[5vw] md:pl-0">
-          {column(LEFT)}
-          {column(RIGHT, 'md:pt-[clamp(18rem,34vw,36rem)]')}
+    <section aria-labelledby="projetos" className={cn(PAGE_GRID, 'gap-y-5 pt-[clamp(1.25rem,2.5vw,2.5rem)] pb-16')}>
+      <div className="col-span-12 flex items-center justify-between gap-4">
+        <h2 id="projetos" className="text-[clamp(1.75rem,2.8vw,3rem)] font-bold text-brand">
+          {dict.projects.title}
+        </h2>
+        <div className="flex gap-2">
+          <button type="button" onClick={() => scrollRow(-1)} disabled={edges.start} aria-label={t('projects.rowPrev')} className={arrow}>
+            <ChevronLeft size={20} aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => scrollRow(1)} disabled={edges.end} aria-label={t('projects.rowNext')} className={arrow}>
+            <ChevronRight size={20} aria-hidden="true" />
+          </button>
         </div>
       </div>
-      <div className="mt-[clamp(4rem,8vw,8rem)]">
+
+      {/* py-2 leaves room for the cards' shadow, which the scroll box would clip. */}
+      <ul
+        ref={rowRef}
+        onScroll={updateEdges}
+        className="no-scrollbar col-span-12 flex snap-x snap-mandatory gap-8 overflow-x-auto py-2"
+      >
+        {ORDER.map((id) => (
+          <ProjectCard key={id} project={byId[id]} />
+        ))}
+      </ul>
+
+      <div className="col-span-12 mt-[clamp(3rem,6vw,6rem)]">
         <SocialLinks />
       </div>
     </section>
