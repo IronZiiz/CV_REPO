@@ -6,7 +6,10 @@ import { useI18n } from '@/i18n/context'
 import { cn } from '@/lib/utils'
 
 // BASE_URL keeps the link working when the site is served from a sub-path (GitHub Pages).
-const CV_PATH = `${import.meta.env.BASE_URL}THIAGO_ZILLI_CV.pdf`
+const CV_FILES = {
+  pt: `${import.meta.env.BASE_URL}Curriculo_Thiago_Zilli_PT.pdf`,
+  en: `${import.meta.env.BASE_URL}Resume_Thiago_Zilli_EN.pdf`,
+}
 
 const circle =
   'inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand shadow-sm transition-[transform,background-color,color] duration-200 hover:scale-105 active:scale-95 sm:size-12'
@@ -32,7 +35,7 @@ export function Header() {
 
       <div className="flex items-center gap-2 sm:gap-3">
         <a
-          href={CV_PATH}
+          href={CV_FILES[lang]}
           download
           aria-label={t('header.downloadCvLabel')}
           className="group flex items-center rounded-full"
