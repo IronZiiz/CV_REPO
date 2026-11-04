@@ -20,14 +20,14 @@ function CircleButton({ className, ...props }: ComponentProps<'button'>) {
 }
 
 interface HeaderProps {
-  // The Sobre panel links only show while Sobre is the active section.
-  showPanels: boolean
+  // All the Sobre panel links show in Sobre; in Projetos only Contato stays.
+  inAbout: boolean
   panel: AboutPanel
   onPanelChange: (panel: AboutPanel) => void
 }
 
 // Sticky, so the section links stay in reach on every screen.
-export function Header({ showPanels, panel, onPanelChange }: HeaderProps) {
+export function Header({ inAbout, panel, onPanelChange }: HeaderProps) {
   const { lang, setLang, t } = useI18n()
   const { theme, toggleTheme } = useTheme()
   const themeLabel = theme === 'dark' ? t('header.lightMode') : t('header.darkMode')
@@ -46,37 +46,35 @@ export function Header({ showPanels, panel, onPanelChange }: HeaderProps) {
         </div>
 
         {/* Below the buttons on small screens, between them from lg up. */}
-        {showPanels && (
-          <nav aria-label={t('nav.panelsLabel')} className="order-last col-span-12 lg:order-none lg:col-span-8">
-            <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1 xl:gap-x-8">
-              {ABOUT_PANELS.map((id) => {
-                const active = id === panel
-                return (
-                  <li key={id}>
-                    <button
-                      type="button"
-                      onClick={() => onPanelChange(id)}
-                      aria-current={active ? 'true' : undefined}
+        <nav aria-label={t('nav.panelsLabel')} className="order-last col-span-12 lg:order-none lg:col-span-8">
+          <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1 xl:gap-x-8">
+            {(inAbout ? ABOUT_PANELS : (['contact'] as const)).map((id) => {
+              const active = inAbout && id === panel
+              return (
+                <li key={id}>
+                  <button
+                    type="button"
+                    onClick={() => onPanelChange(id)}
+                    aria-current={active ? 'true' : undefined}
+                    className={cn(
+                      'relative cursor-pointer py-1 text-sm font-semibold whitespace-nowrap transition-colors lg:text-base',
+                      active ? 'text-brand' : 'text-muted-foreground hover:text-brand',
+                    )}
+                  >
+                    {t(`nav.${id}`)}
+                    <span
+                      aria-hidden="true"
                       className={cn(
-                        'relative cursor-pointer py-1 text-sm font-semibold whitespace-nowrap transition-colors lg:text-base',
-                        active ? 'text-brand' : 'text-muted-foreground hover:text-brand',
+                        'absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-brand transition-transform duration-300',
+                        active ? 'scale-x-100' : 'scale-x-0',
                       )}
-                    >
-                      {t(`nav.${id}`)}
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          'absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-brand transition-transform duration-300',
-                          active ? 'scale-x-100' : 'scale-x-0',
-                        )}
-                      />
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          </nav>
-        )}
+                    />
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
 
         <div className="col-span-6 flex items-center justify-end gap-2 sm:gap-3 lg:col-span-2 lg:col-start-11">
           <a

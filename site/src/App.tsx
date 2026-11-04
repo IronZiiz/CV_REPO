@@ -46,6 +46,12 @@ export default function App() {
 
   // Slides towards the link's side: a link to the right enters from the right.
   function changePanel(next: AboutPanel) {
+    // From Projetos (where only Contato is linked), go back to Sobre on that panel.
+    if (section !== 'about') {
+      changeSection('about')
+      setPanel(next)
+      return
+    }
     if (next === panel) return
     setPanelEnter(ABOUT_PANELS.indexOf(next) > ABOUT_PANELS.indexOf(panel) ? 'from-right' : 'from-left')
     setPanel(next)
@@ -61,7 +67,7 @@ export default function App() {
       >
         {t('a11y.skipToContent')}
       </a>
-      <Header showPanels={section === 'about'} panel={panel} onPanelChange={changePanel} />
+      <Header inAbout={section === 'about'} panel={panel} onPanelChange={changePanel} />
       <Hero section={section} onSectionChange={changeSection} />
       {/* Remounting on `section` replays the slide-in in the switch's direction. */}
       <main

@@ -5,6 +5,7 @@ import api from '@/assets/img/api.jpg'
 import dashboard from '@/assets/img/dashboard.jpg'
 import finetuning from '@/assets/img/finetuning.jpg'
 import hackathon from '@/assets/img/hackathon.jpg'
+import portfolio from '@/assets/img/portfolio.jpg'
 import { GithubIcon } from '@/components/brand-icons'
 import { ProjectGallery, type GalleryItem } from '@/components/ProjectGallery'
 import { RichText } from '@/components/RichText'
@@ -16,17 +17,18 @@ import { cn } from '@/lib/utils'
 
 type Project = Dictionary['projects']['items'][number]
 
-// Images from IMGS/, shown behind the open card and on its sliver. CVNN and this
-// portfolio have none: their card is a plain surface.
+// Images from IMGS/ (and, for this site, a capture of its Quem sou eu panel), shown
+// behind the open card and on its sliver. CVNN has none: its card is a plain surface.
 const COVER = 'inset-0 size-full object-cover'
 
-// The two wide screenshots at 70% of the height a cover would give them (30% less
+// The wide screenshots at 70% of the height a cover would give them (30% less
 // zoom), centred along the top edge.
 const ZOOMED_OUT = 'top-0 left-1/2 h-[70%] w-auto max-w-none -translate-x-1/2'
 
 const MEDIA: Record<string, { src: string; fit: string } | undefined> = {
   dashboard: { src: dashboard, fit: ZOOMED_OUT },
   api: { src: api, fit: ZOOMED_OUT },
+  portfolio: { src: portfolio, fit: ZOOMED_OUT },
   // Portrait photo: keep the band with the faces.
   hackathon: { src: hackathon, fit: `${COVER} object-[center_27%]` },
   finetuning: { src: finetuning, fit: `${COVER} object-top` },

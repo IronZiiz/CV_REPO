@@ -36,7 +36,10 @@ const OFFSETS = [-3, -2, -1, 0, 1, 2, 3] as const
 
 const SPRING = { type: 'spring', stiffness: 220, damping: 26, mass: 0.75 } as const
 
-// The side cards' fade eases out like the old reading focus (500 ms ease-out).
+// Side cards and their names stay behind the open card at this opacity.
+const SIDE_OPACITY = 0.8
+
+// The side cards' blur eases out like the old reading focus (500 ms ease-out).
 const FADE_EASE = { duration: 0.5, ease: 'easeOut' } as const
 
 const GUTTER = 32
@@ -211,7 +214,8 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
               const virtualIndex = page + offset
               const item = items[((virtualIndex % total) + total) % total]
               const active = offset === 0
-              // Until the first change of card, the side cards sit back: 10% fainter, softly blurred.
+              // Side cards sit back at 80% opacity; until the first change of card they
+              // are also softly blurred.
               const faded = !active && !engaged
               const showNotch = Math.abs(offset) === 1 || (Math.abs(offset) === 2 && tier === 'desktop')
 
@@ -221,7 +225,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                   initial={false}
                   animate={{
                     ...slots[offset],
-                    opacity: slots[offset].opacity * (faded ? 0.9 : 1),
+                    opacity: slots[offset].opacity * (active ? 1 : SIDE_OPACITY),
                     filter: faded ? 'blur(1px)' : 'blur(0px)',
                     zIndex: active ? 0 : 10,
                   }}
@@ -241,7 +245,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                       transition={{ duration: 0.22, ease: 'easeOut' }}
                       className="absolute inset-0 p-1.5"
                     >
-                      {/* The name is not in here: it runs on the ring below the cards. */}
+                      {/* The name is not in here: it runs on the ring above the cards. */}
                       <div className="relative size-full overflow-hidden rounded-[clamp(6px,0.7vw,11px)] bg-background/60">
                         {item.image && (
                           <img src={item.image} alt="" draggable={false} className="absolute inset-0 size-full object-cover object-top opacity-90" />
@@ -279,8 +283,9 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
             })}
 
             {/*
-             * The ring: each side card's full name under it. The cards shrink and rise
-             * towards the edges, so the names follow the carousel's curve.
+             * The ring: each side card's full name above it. The cards shrink towards
+             * the edges, so the names follow the carousel's curve. Each name hangs from
+             * a zero-height anchor just above its card, so longer names grow upwards.
              */}
             {tier !== 'mobile' &&
               OFFSETS.map((offset) => {
@@ -290,23 +295,25 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                 const labelW = Math.max(slot.width, 110)
                 const near = Math.abs(offset) === 1
                 return (
-                  <motion.p
+                  <motion.div
                     key={`label-${virtualIndex}`}
                     aria-hidden="true"
                     initial={false}
                     animate={{
                       x: slot.x + slot.width / 2 - labelW / 2,
-                      y: slot.y + slot.height + 12,
+                      y: slot.y - 10,
                       width: labelW,
                       fontSize: near ? 12 : 10.5,
-                      opacity: offset === 0 ? 0 : slot.opacity * (near ? 1 : 0.8),
+                      opacity: offset === 0 ? 0 : slot.opacity * SIDE_OPACITY,
                     }}
                     transition={SPRING}
-                    style={{ position: 'absolute', left: '50%', top: '50%' }}
-                    className="card-title pointer-events-none z-30 text-center leading-snug font-bold text-brand"
+                    style={{ position: 'absolute', left: '50%', top: '50%', height: 0 }}
+                    className="pointer-events-none z-30"
                   >
-                    {item.label}
-                  </motion.p>
+                    <p className="card-title absolute inset-x-0 bottom-0 text-center leading-snug font-bold text-brand">
+                      {item.label}
+                    </p>
+                  </motion.div>
                 )
               })}
 
@@ -321,7 +328,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
         )}
 
         {/* One tab per item; the open tab fills up until autoplay moves on. */}
-        <div className="mt-6 flex items-center justify-center sm:mt-12">
+        <div className="mt-6 flex items-center justify-center">
           <div role="tablist" aria-label={label} className="flex items-center gap-1.5">
             {items.map((item, index) => {
               const selected = index === activeIndex
