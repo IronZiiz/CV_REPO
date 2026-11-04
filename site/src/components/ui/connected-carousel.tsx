@@ -1,6 +1,6 @@
 import { MotionConfig, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -37,6 +37,9 @@ const OFFSETS = [-3, -2, -1, 0, 1, 2, 3] as const
 const SPRING = { type: 'spring', stiffness: 220, damping: 26, mass: 0.75 } as const
 
 const GUTTER = 32
+
+// Reading line a bit above the middle of the viewport, as in the old reading focus.
+const READING_LINE = 0.45
 
 interface Slot {
   x: number
@@ -118,6 +121,8 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
   const [page, setPage] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [inFocus, setInFocus] = useState(false)
 
   const total = items.length
   const activeIndex = ((page % total) + total) % total
@@ -161,8 +166,35 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
     else if (event.key === 'ArrowRight') go(1)
   }
 
+  // Whether the carousel is the block being read: its middle near the reading line,
+  // or the page scrolled to the bottom, where the line can no longer reach it.
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const track = trackRef.current
+      if (!track) return
+      const { top, bottom } = track.getBoundingClientRect()
+      const line = window.innerHeight * READING_LINE
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+      setInFocus(atBottom || Math.abs((top + bottom) / 2 - line) < window.innerHeight * 0.2)
+    }
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      cancelAnimationFrame(frame)
+    }
+  }, [width, contentH])
+
   // Autoplay waits while the visitor is reading (pointer or focus inside).
   const paused = hovered || focused
+  const sharp = inFocus || hovered || focused
 
   return (
     <MotionConfig reducedMotion="user">
@@ -196,7 +228,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
         </div>
 
         {width > 0 && contentH > 0 && (
-          <div aria-live="polite" className="relative w-full" style={{ height: contentH }}>
+          <div ref={trackRef} aria-live="polite" className="relative w-full" style={{ height: contentH }}>
             {OFFSETS.map((offset) => {
               const virtualIndex = page + offset
               const item = items[((virtualIndex % total) + total) % total]
@@ -224,22 +256,10 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
                       transition={{ duration: 0.22, ease: 'easeOut' }}
                       className="absolute inset-0 p-1.5"
                     >
+                      {/* The name is not in here: it runs on the ring below the cards. */}
                       <div className="relative size-full overflow-hidden rounded-[clamp(14px,1.6vw,24px)] bg-background/60">
                         {item.image && (
                           <img src={item.image} alt="" draggable={false} className="absolute inset-0 size-full object-cover object-top opacity-90" />
-                        )}
-                        <span className="absolute inset-0 bg-linear-to-t from-surface/95 via-surface/30 to-transparent" />
-                        {/* Wide slivers read the name across, narrow ones up the side. */}
-                        {slots[offset].width >= 140 ? (
-                          <span className="absolute inset-x-3 bottom-3 line-clamp-3 text-sm leading-snug font-bold text-brand">
-                            {item.label}
-                          </span>
-                        ) : (
-                          tier !== 'mobile' && (
-                            <span className="absolute inset-x-0 bottom-4 mx-auto block max-h-[calc(100%-2rem)] w-fit rotate-180 truncate text-sm font-bold text-brand [writing-mode:vertical-rl]">
-                              {item.label}
-                            </span>
-                          )
                         )}
                       </div>
                       {!active && (
@@ -273,6 +293,55 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
               )
             })}
 
+            {/*
+             * The area around the open card, blurred until the carousel is the block being
+             * read (as Sobre/Projetos did on scroll); hovering or focusing it clears it too.
+             */}
+            {(['left', 'right'] as const).map((side) => (
+              <div
+                key={side}
+                aria-hidden="true"
+                className={cn(
+                  'pointer-events-none absolute inset-y-0 z-20 transition-[backdrop-filter,background-color] duration-500 ease-out contrast-more:bg-transparent contrast-more:backdrop-blur-[0px]',
+                  side === 'left' ? 'left-0' : 'right-0',
+                  sharp ? 'bg-transparent backdrop-blur-[0px]' : 'bg-background/30 backdrop-blur-[3px]',
+                )}
+                style={{ width: (width - activeW) / 2 }}
+              />
+            ))}
+
+            {/*
+             * The ring: each side card's full name under it. The cards shrink and rise
+             * towards the edges, so the names follow the carousel's curve.
+             */}
+            {tier !== 'mobile' &&
+              OFFSETS.map((offset) => {
+                const virtualIndex = page + offset
+                const item = items[((virtualIndex % total) + total) % total]
+                const slot = slots[offset]
+                const labelW = Math.max(slot.width, 110)
+                const near = Math.abs(offset) === 1
+                return (
+                  <motion.p
+                    key={`label-${virtualIndex}`}
+                    aria-hidden="true"
+                    initial={false}
+                    animate={{
+                      x: slot.x + slot.width / 2 - labelW / 2,
+                      y: slot.y + slot.height + 12,
+                      width: labelW,
+                      fontSize: near ? 13 : 11.5,
+                      opacity: offset === 0 ? 0 : slot.opacity * (near ? 1 : 0.8),
+                    }}
+                    transition={SPRING}
+                    style={{ position: 'absolute', left: '50%', top: '50%' }}
+                    className="card-title pointer-events-none z-30 text-center leading-snug font-bold text-brand"
+                  >
+                    {item.label}
+                  </motion.p>
+                )
+              })}
+
             {/* At the open card's middle, one on each edge of the row. */}
             <button type="button" onClick={() => go(-1)} aria-label={prevLabel} className={cn(arrow, 'left-0')}>
               <ChevronLeft size={22} aria-hidden="true" />
@@ -284,7 +353,7 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
         )}
 
         {/* One tab per item; the open tab fills up until autoplay moves on. */}
-        <div className="mt-6 flex items-center justify-center">
+        <div className="mt-6 flex items-center justify-center sm:mt-12">
           <div role="tablist" aria-label={label} className="flex items-center gap-1.5">
             {items.map((item, index) => {
               const selected = index === activeIndex
@@ -322,4 +391,4 @@ export function ConnectedCarousel<T extends ConnectedCarouselItem>({
 }
 
 const arrow =
-  'absolute top-1/2 z-20 inline-flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-brand bg-background/85 text-brand shadow-sm backdrop-blur-sm transition-colors hover:bg-brand hover:text-on-brand'
+  'absolute top-1/2 z-30 inline-flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-brand bg-background/85 text-brand shadow-sm backdrop-blur-sm transition-colors hover:bg-brand hover:text-on-brand'

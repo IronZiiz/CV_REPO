@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import { useI18n } from '@/i18n/context'
 import { cn } from '@/lib/utils'
@@ -81,7 +82,7 @@ export function ProjectGallery({
   const current = items[index]
   const url = IMAGES[current.src]
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm sm:p-6"
       onClick={onClose}
@@ -153,7 +154,10 @@ export function ProjectGallery({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    // Rendered on <body>: inside the carousel's animated (transformed) cards a fixed
+    // overlay would be positioned and clipped by the card, not by the viewport.
+    document.body,
   )
 }
 

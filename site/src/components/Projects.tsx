@@ -96,7 +96,7 @@ function ProjectContent({ project }: { project: Project }) {
          * The title does what the whole card did before: a closed-source project opens
          * its gallery (same as "ver imagens ilustrativas"), the others open their link.
          */}
-        <h3 className="text-lg leading-tight font-bold text-brand">
+        <h3 className="card-title text-lg leading-tight font-bold text-brand">
           {closedSource && gallery.length > 0 ? (
             <button type="button" onClick={() => setGalleryOpen(true)} className={cn(titleAction, 'cursor-pointer')}>
               {title}
@@ -110,7 +110,7 @@ function ProjectContent({ project }: { project: Project }) {
             title
           )}
         </h3>
-        <p className="mt-0.5 text-sm text-brand">{project.period}</p>
+        <p className="mt-0.5 text-sm text-brand dark:text-white/85">{project.period}</p>
 
         <ul className="mt-2.5 flex flex-wrap gap-1">
           {project.chips.map((chip) => (
