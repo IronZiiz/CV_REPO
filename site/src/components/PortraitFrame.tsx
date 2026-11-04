@@ -8,7 +8,7 @@ export function PortraitFrame({ alt }: { alt: string }) {
   return (
     <GlowCard
       backdrop={<span aria-hidden="true" className="portrait-ring" />}
-      className="portrait-card w-[clamp(128px,15vw,232px)] shrink-0 rounded-[clamp(10px,1vw,16px)] border-brand/30 p-[clamp(5px,0.5vw,8px)]"
+      className="portrait-card w-[clamp(104px,11vw,176px)] shrink-0 rounded-[clamp(10px,1vw,16px)] border-brand/30 p-[clamp(5px,0.5vw,8px)]"
     >
       <img
         src={portrait}

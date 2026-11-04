@@ -19,6 +19,12 @@
     "portraitAlt": "Portrait of Thiago Zilli"
   },
   "nav": {
+    "panelsLabel": "About sections",
+    "whoAmI": "Who am I",
+    "stack": "Main stack",
+    "education": "Education",
+    "languages": "Languages",
+    "contact": "Contact",
     "label": "Switch between About and Projects",
     "about": "About",
     "projects": "Projects"

@@ -19,6 +19,12 @@
     "portraitAlt": "Retrato de Thiago Zilli"
   },
   "nav": {
+    "panelsLabel": "Seções de Sobre",
+    "whoAmI": "Quem sou eu",
+    "stack": "Stack principal",
+    "education": "Formação",
+    "languages": "Línguas",
+    "contact": "Contato",
     "label": "Alternar entre Sobre e Projetos",
     "about": "Sobre",
     "projects": "Projetos"
