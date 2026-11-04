@@ -56,12 +56,12 @@ export function About({ panel, enter }: AboutProps) {
         {titles[panel]}
       </h2>
 
-      {/* Three paragraphs, one per 4-column block on wide screens. */}
+      {/* One column across the full 12-column width. */}
       {panel === 'whoAmI' &&
         whoAmI.paragraphs.map((paragraph) => (
           <p
             key={paragraph.slice(0, 24)}
-            className="col-span-12 text-[0.95rem] leading-[1.6] text-muted-foreground lg:col-span-4 xl:text-base"
+            className="col-span-12 text-base leading-relaxed text-muted-foreground md:text-justify xl:text-lg"
           >
             <RichText text={paragraph} />
           </p>
