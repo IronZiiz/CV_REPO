@@ -79,16 +79,20 @@ export function About({ panel, enter }: AboutProps) {
         {titles[panel]}
       </h2>
 
-      {/* One column across the full 12-column width. */}
-      {panel === 'whoAmI' &&
-        whoAmI.paragraphs.map((paragraph) => (
-          <p
-            key={paragraph.slice(0, 24)}
-            className="col-span-12 text-base leading-relaxed text-muted-foreground md:text-justify xl:text-lg"
-          >
-            <RichText text={paragraph} />
-          </p>
-        ))}
+      {/* One column across the full width, left-aligned: justifying opened uneven gaps between words. */}
+      {panel === 'whoAmI' && (
+        <>
+          {whoAmI.paragraphs.map((paragraph) => (
+            <p key={paragraph.slice(0, 24)} className="reading-text col-span-12 text-base leading-relaxed text-muted-foreground xl:text-lg">
+              <RichText text={paragraph} />
+            </p>
+          ))}
+          {/* The contact links right after the introduction, as in Contato. */}
+          <div className="col-span-12 mt-4">
+            <SocialLinks />
+          </div>
+        </>
+      )}
 
       {panel === 'stack' && (
         <ul className={subgrid}>

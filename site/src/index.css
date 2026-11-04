@@ -368,3 +368,14 @@
     0 0 10px color-mix(in oklab, var(--brand) 80%, transparent),
     0 1px 2px color-mix(in oklab, var(--brand) 70%, transparent);
 }
+
+/*
+ * Long reading text (Quem sou eu) in dark mode: a lighter grey, closer to the bold
+ * white, and the platform's default smoothing, since "antialiased" thins light
+ * letters on a dark background.
+ */
+.dark .reading-text {
+  color: #c8cedb;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}

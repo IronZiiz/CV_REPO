@@ -9,14 +9,14 @@ interface HeroProps {
   onSectionChange: (section: Section) => void
 }
 
-// Portrait and name on 8 columns, the Sobre/Projetos switch on the last 4 (stacked
-// on small screens): one row keeps the panel below it above the fold.
+// Portrait and name across the grid, then the Sobre/Projetos switch on its own row,
+// centred on the page (on one row the name would run into the middle).
 export function Hero({ section, onSectionChange }: HeroProps) {
   const { t } = useI18n()
 
   return (
     <section className={cn(PAGE_GRID, 'items-center gap-y-6 pt-[clamp(1.25rem,2.5vw,2.5rem)]')}>
-      <div className="col-span-12 flex items-center gap-[clamp(0.75rem,2vw,2rem)] lg:col-span-8">
+      <div className="col-span-12 flex items-center gap-[clamp(0.75rem,2vw,2rem)]">
         <PortraitFrame alt={t('hero.portraitAlt')} />
 
         <h1 className="text-[clamp(1.75rem,3.8vw,4rem)] leading-tight text-brand">
@@ -29,7 +29,7 @@ export function Hero({ section, onSectionChange }: HeroProps) {
         onChange={onSectionChange}
         labels={{ about: t('nav.about'), projects: t('nav.projects') }}
         ariaLabel={t('nav.label')}
-        className="col-span-12 flex justify-center lg:col-span-4 lg:justify-end"
+        className="col-span-12 flex justify-center"
       />
     </section>
   )
