@@ -334,11 +334,26 @@
   }
 }
 
-/* Projetos row: scrolls by swipe, trackpad or the arrow buttons, without a visible bar. */
-.no-scrollbar {
-  scrollbar-width: none;
+/* Connected carousel (Projetos): the open tab fills up, then autoplay moves on. */
+@keyframes carousel-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.carousel-progress {
+  transform-origin: left center;
+  animation-name: carousel-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* No autoplay for visitors who prefer reduced motion: the bar just shows the open tab. */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-progress {
+    animation: none;
+  }
 }
