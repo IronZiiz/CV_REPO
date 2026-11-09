@@ -1,4 +1,5 @@
 # Portfólio — um site construído por context engineering
+<img width="2730" height="1628" alt="image" src="https://github.com/user-attachments/assets/1be4aefc-4512-403a-8908-50e9cfb8cfea" />
 
 Este repositório tem duas partes:
 
